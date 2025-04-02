@@ -7,6 +7,14 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+fun CurrencyCode.toFullName(): String {
+    return when (this) {
+        CurrencyCode.RUB -> "Рубль"
+        CurrencyCode.KZT -> "Тенге"
+        CurrencyCode.CNY -> "Юань"
+    }
+}
+
 fun CurrencyCode.toSymbol(): Char {
     return when (this) {
         CurrencyCode.RUB -> '₽'
