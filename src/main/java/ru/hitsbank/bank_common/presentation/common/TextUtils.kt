@@ -7,7 +7,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-private fun CurrencyCode.toSymbol(): Char {
+fun CurrencyCode.toSymbol(): Char {
     return when (this) {
         CurrencyCode.RUB -> '₽'
         CurrencyCode.KZT -> '₸'
