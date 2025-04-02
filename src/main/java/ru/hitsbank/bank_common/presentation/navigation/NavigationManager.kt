@@ -1,11 +1,14 @@
-package ru.hitsbank.clientbankapplication.core.navigation.base
+package ru.hitsbank.bank_common.presentation.navigation
 
 import androidx.navigation.NavOptionsBuilder
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NavigationManager {
+@Singleton
+class NavigationManager @Inject constructor() {
 
     private val _commands = MutableSharedFlow<NavigationCommand>(extraBufferCapacity = 1)
     val commands = _commands.asSharedFlow()

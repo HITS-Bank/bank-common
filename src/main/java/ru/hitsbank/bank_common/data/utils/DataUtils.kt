@@ -1,4 +1,4 @@
-package ru.hitsbank.bank_common.data
+package ru.hitsbank.bank_common.data.utils
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher

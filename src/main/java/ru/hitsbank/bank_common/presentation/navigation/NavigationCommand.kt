@@ -1,4 +1,4 @@
-package ru.hitsbank.clientbankapplication.core.navigation.base
+package ru.hitsbank.bank_common.presentation.navigation
 
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
