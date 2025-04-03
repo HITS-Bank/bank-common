@@ -5,8 +5,11 @@ object Constants {
     const val CLIENT_APP_CHANNEL = "CLIENT"
 
     const val DEEPLINK_SCHEME_SEPARATOR = "://"
+    const val DEEPLINK_PART_SEPARATOR = "/"
 
     const val DEEPLINK_APP_SCHEME = "hitsbankapp"
+    const val DEEPLINK_EMPLOYEE_PART = "employee"
+    const val DEEPLINK_CLIENT_PART = "client"
     const val DEEPLINK_AUTH_HOST = "authorized"
 
     const val KEYCLOAK_BASE_URL = "http://10.0.2.2:8080/"
