@@ -8,6 +8,7 @@ import ru.hitsbank.bank_common.domain.repository.IAuthRepository
 import ru.hitsbank.bank_common.domain.repository.IProfileRepository
 import ru.hitsbank.bank_common.domain.toState
 import ru.hitsbank.bank_common.domain.Result
+import ru.hitsbank.bank_common.domain.entity.RoleType
 import javax.inject.Inject
 
 class AuthInteractor @Inject constructor(
@@ -15,13 +16,13 @@ class AuthInteractor @Inject constructor(
     private val profileRepository: IProfileRepository,
 ) {
 
-    fun exchangeAuthCodeForToken(code: String): Flow<State<Completable>> = flow {
+    fun exchangeAuthCodeForToken(code: String, roleType: RoleType): Flow<State<Completable>> = flow {
         emit(State.Loading)
-        emit(authRepository.exchangeAuthCodeForToken(code).toState())
+        emit(authRepository.exchangeAuthCodeForToken(code, roleType).toState())
 
         when (val userProfile = profileRepository.getSelfProfile()) {
             is Result.Error -> emit(userProfile.toState())
-            is Result.Success -> authRepository.saveIsUserBlocked(userProfile.data.isBanned)
+            is Result.Success -> authRepository.saveIsUserBlocked(userProfile.data.isBlocked)
         }
     }
 

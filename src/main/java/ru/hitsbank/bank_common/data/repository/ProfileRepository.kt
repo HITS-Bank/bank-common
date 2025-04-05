@@ -25,7 +25,7 @@ class ProfileRepository @Inject constructor(
                 .toResult()
                 .also { result ->
                     if (result is Result.Success) {
-                        sessionManager.saveIsUserBlocked(result.data.isBanned)
+                        sessionManager.saveIsUserBlocked(result.data.isBlocked)
                     }
                 }
                 .map(mapper::map)
