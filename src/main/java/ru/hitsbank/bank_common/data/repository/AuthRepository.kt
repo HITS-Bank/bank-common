@@ -72,4 +72,8 @@ class AuthRepository @Inject constructor(
     override fun getIsUserBlocked(): Result<Boolean> {
         return Result.Success(sessionManager.isUserBlocked())
     }
+
+    override suspend fun isUserLoggedIn(): Boolean {
+        return sessionManager.hasToken()
+    }
 }
