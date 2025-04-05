@@ -42,8 +42,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -239,7 +241,9 @@ fun ListItem(
     titleTextStyle: TextStyle = S16_W400.copy(color = MaterialTheme.colorScheme.onSurface),
     subtitleTextStyle: TextStyle = S14_W400.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
     padding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+    isTitleCopyable: Boolean = false,
 ) {
+    val clipboardManager = LocalClipboardManager.current
     Box {
         Row(
             modifier = modifier
@@ -249,13 +253,26 @@ fun ListItem(
             with(icon) { Icon() }
             16.dp.horizontalSpacer()
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    style = titleTextStyle,
-                    textAlign = TextAlign.Start,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = title,
+                        style = titleTextStyle,
+                        textAlign = TextAlign.Start,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    if (isTitleCopyable) {
+                        8.dp.horizontalSpacer()
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_content_copy_16),
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp).clickable {
+                                clipboardManager.setText(AnnotatedString(title))
+                            },
+                            tint = MaterialTheme.colorScheme.secondary,
+                        )
+                    }
+                }
                 Text(
                     text = subtitle,
                     style = subtitleTextStyle,
@@ -283,6 +300,7 @@ fun SwipeableListItem(
     titleTextStyle: TextStyle = S16_W400.copy(color = MaterialTheme.colorScheme.onSurface),
     subtitleTextStyle: TextStyle = S14_W400.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
     padding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+    isTitleCopyable: Boolean = false,
 ) {
     val swipeOffset = with(LocalDensity.current) { 65.dp.toPx() }
     val velocityThreshold = with(LocalDensity.current) { 1000.dp.toPx() }
@@ -341,6 +359,7 @@ fun SwipeableListItem(
             titleTextStyle = titleTextStyle,
             subtitleTextStyle = subtitleTextStyle,
             padding = padding,
+            isTitleCopyable = isTitleCopyable,
         )
     }
 }
