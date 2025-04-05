@@ -3,6 +3,7 @@ package ru.hitsbank.bank_common.data.repository
 import kotlinx.coroutines.Dispatchers
 import ru.hitsbank.bank_common.Constants.AUTH_CLIENT_ID
 import ru.hitsbank.bank_common.Constants.AUTH_REDIRECT_URI
+import ru.hitsbank.bank_common.Constants.AUTH_REDIRECT_URI_EMPLOYEE
 import ru.hitsbank.bank_common.data.api.AuthApi
 import ru.hitsbank.bank_common.data.datasource.SessionManager
 import ru.hitsbank.bank_common.data.model.TokenType
@@ -11,6 +12,7 @@ import ru.hitsbank.bank_common.data.utils.toResult
 import ru.hitsbank.bank_common.domain.Completable
 import ru.hitsbank.bank_common.domain.repository.IAuthRepository
 import ru.hitsbank.bank_common.domain.Result
+import ru.hitsbank.bank_common.domain.entity.RoleType
 import ru.hitsbank.bank_common.domain.toCompletableResult
 import javax.inject.Inject
 
@@ -22,13 +24,16 @@ class AuthRepository @Inject constructor(
     private val sessionManager: SessionManager,
 ) : IAuthRepository {
 
-    override suspend fun exchangeAuthCodeForToken(code: String): Result<Completable> {
+    override suspend fun exchangeAuthCodeForToken(code: String, roleType: RoleType): Result<Completable> {
         return apiCall(Dispatchers.IO) {
             authApi.exchangeAuthCodeForToken(
                 clientId = AUTH_CLIENT_ID,
                 grantType = AUTH_CODE_GRANT_TYPE,
                 code = code,
-                redirectUri = AUTH_REDIRECT_URI,
+                redirectUri = when (roleType) {
+                    RoleType.EMPLOYEE -> AUTH_REDIRECT_URI_EMPLOYEE
+                    RoleType.CLIENT -> AUTH_REDIRECT_URI
+                },
             )
                 .toResult()
                 .also { result ->

@@ -12,9 +12,8 @@ class ProfileMapper @Inject constructor() {
                 id = id,
                 firstName = firstName,
                 lastName = lastName,
-                isBanned = isBanned,
-                email = email,
-                role = role,
+                isBlocked = isBlocked,
+                roles = roles,
             )
         }
     }

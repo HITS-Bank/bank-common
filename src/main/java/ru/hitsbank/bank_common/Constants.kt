@@ -16,6 +16,7 @@ object Constants {
     const val AUTH_PAGE_PATH = "realms/bank/protocol/openid-connect/auth"
     const val AUTH_CLIENT_ID = "bank-rest-api"
     const val AUTH_REDIRECT_URI = "$DEEPLINK_APP_SCHEME$DEEPLINK_SCHEME_SEPARATOR$DEEPLINK_AUTH_HOST"
+    const val AUTH_REDIRECT_URI_EMPLOYEE = "hitsbankapp://employee_authorized"
 
     const val GENERAL_ERROR_TEXT = "Что-то пошло не так…"
 
