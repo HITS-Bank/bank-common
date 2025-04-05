@@ -13,4 +13,6 @@ interface IAuthRepository {
     fun saveIsUserBlocked(isUserBlocked: Boolean)
 
     fun getIsUserBlocked(): Result<Boolean>
+
+    suspend fun isUserLoggedIn(): Boolean
 }

@@ -7,6 +7,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import ru.hitsbank.bank_common.domain.entity.ThemeEntity
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -250,11 +251,20 @@ val unspecified_scheme = ColorFamily(
 
 @Composable
 fun AppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
+    themeType: ThemeEntity,
+    content: @Composable () -> Unit,
 ) {
+    val colorScheme = when (themeType) {
+        ThemeEntity.DARK -> darkScheme
+        ThemeEntity.LIGHT -> lightScheme
+        ThemeEntity.SAME_AS_SYSTEM -> if (isSystemInDarkTheme()) {
+            darkScheme
+        } else {
+            lightScheme
+        }
+    }
     MaterialTheme(
-        colorScheme = lightScheme,
+        colorScheme = colorScheme,
         typography = AppTypography,
         content = content
     )

@@ -9,11 +9,13 @@ import ru.hitsbank.bank_common.domain.repository.IProfileRepository
 import ru.hitsbank.bank_common.domain.toState
 import ru.hitsbank.bank_common.domain.Result
 import ru.hitsbank.bank_common.domain.entity.RoleType
+import ru.hitsbank.bank_common.domain.repository.IThemeRepository
 import javax.inject.Inject
 
 class AuthInteractor @Inject constructor(
     private val authRepository: IAuthRepository,
     private val profileRepository: IProfileRepository,
+    private val personalizationRepository: IThemeRepository,
 ) {
 
     fun exchangeAuthCodeForToken(code: String, roleType: RoleType): Flow<State<Completable>> = flow {
@@ -24,6 +26,8 @@ class AuthInteractor @Inject constructor(
             is Result.Error -> emit(userProfile.toState())
             is Result.Success -> authRepository.saveIsUserBlocked(userProfile.data.isBlocked)
         }
+
+        personalizationRepository.updateThemeFromRemote(roleType)
     }
 
     fun getIsUserBlocked(): Flow<State<Boolean>> = flow {
