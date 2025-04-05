@@ -7,14 +7,34 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.hitsbank.bank_common.domain.State
+import ru.hitsbank.bank_common.domain.map
 import ru.hitsbank.bank_common.presentation.common.BankUiState
 import ru.hitsbank.bank_common.presentation.common.getIfSuccess
 import ru.hitsbank.bank_common.presentation.common.updateIfSuccess
 
+abstract class PaginationViewModel<T, R: PaginationStateHolder<T>>(initState: BankUiState<R>) : PaginationViewModelBase<T, R>(initState) {
+
+    final override fun getNextPage(pageNumber: Int): Flow<State<PageInfo<T>>> {
+        val pageSize = _state.value.getIfSuccess()?.pageSize ?: return flowOf(State.Error())
+        return getNextPageContents(pageNumber).map { state ->
+            state.map { list ->
+                PageInfo(
+                    content = list,
+                    paginationFinished = list.size < pageSize
+                )
+            }
+        }
+    }
+
+    protected abstract fun getNextPageContents(pageNumber: Int): Flow<State<List<T>>>
+}
+
 @Suppress("UNCHECKED_CAST")
-abstract class PaginationViewModel<T, R: PaginationStateHolder<T>>(initState: BankUiState<R>) : ViewModel() {
+abstract class PaginationViewModelBase<T, R: PaginationStateHolder<T>>(initState: BankUiState<R>) : ViewModel() {
 
     protected val _state = MutableStateFlow(initState)
     val state = _state.asStateFlow()
@@ -57,18 +77,18 @@ abstract class PaginationViewModel<T, R: PaginationStateHolder<T>>(initState: Ba
 
     private suspend fun loadPage() {
         val stateValue = state.getIfSuccess() ?: return
-        getNextPageContents(stateValue.pageNumber).collect { state ->
+        getNextPage(stateValue.pageNumber).collect { state ->
             when (state) {
                 is State.Error -> _state.updateIfSuccess { oldState ->
                     oldState.copyWith(paginationState = PaginationState.Error) as R
                 }
                 State.Loading -> Unit
-                is State.Success<List<T>> -> _state.updateIfSuccess { oldState ->
+                is State.Success -> _state.updateIfSuccess { oldState ->
                     oldState.copyWith(
                         paginationState =
-                            if (state.data.size < oldState.pageSize) PaginationState.EndReached
+                            if (state.data.paginationFinished) PaginationState.EndReached
                             else PaginationState.Idle,
-                        data = oldState.data + state.data,
+                        data = oldState.data + state.data.content,
                         pageNumber = oldState.pageNumber + 1,
                     ) as R
                 }
@@ -76,5 +96,10 @@ abstract class PaginationViewModel<T, R: PaginationStateHolder<T>>(initState: Ba
         }
     }
 
-    protected abstract fun getNextPageContents(pageNumber: Int): Flow<State<List<T>>>
+    protected abstract fun getNextPage(pageNumber: Int): Flow<State<PageInfo<T>>>
 }
+
+data class PageInfo<T>(
+    val content: List<T>,
+    val paginationFinished: Boolean,
+)
