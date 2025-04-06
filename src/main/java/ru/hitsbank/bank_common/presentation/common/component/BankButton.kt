@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import ru.hitsbank.bank_common.presentation.common.horizontalSpacer
 import ru.hitsbank.bank_common.presentation.theme.S14_W500
@@ -181,6 +182,8 @@ object BankButton {
                 Text(
                     text = text,
                     style = S14_W500,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -252,6 +255,8 @@ object BankButton {
                 Text(
                     text = text,
                     style = S14_W500,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
