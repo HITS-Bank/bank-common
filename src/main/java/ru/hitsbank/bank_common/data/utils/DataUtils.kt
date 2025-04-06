@@ -40,7 +40,7 @@ fun <T, R : Any> Response<T>.toResult(onSuccessMapper: (T) -> R): Result<R> {
 
 fun <T> Response<T>.toCompletableResult(): Result<Completable> {
     val body = body()
-    return if (isSuccessful && body != null) {
+    return if (isSuccessful && (code() == 204 || body != null)) {
         Result.Success(Completable)
     } else {
         Result.Error()
