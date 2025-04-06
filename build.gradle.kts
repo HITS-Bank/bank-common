@@ -56,6 +56,9 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.stompprotocolandroid)
+    implementation(libs.rxjava2.rxjava)
+    implementation(libs.kotlinx.coroutines.rx2)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
