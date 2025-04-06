@@ -2,6 +2,7 @@ package ru.hitsbank.bank_common.presentation.common.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -66,7 +67,7 @@ object BankButton {
             icon = icon,
             enabled = enabled,
             colors = colors,
-            modifier = modifier.height(40.dp),
+            modifier = modifier,
         )
     }
 
@@ -118,7 +119,7 @@ object BankButton {
             enabled = enabled,
             colors = colors,
             borderColor = borderColor,
-            modifier = modifier.height(40.dp),
+            modifier = modifier,
         )
     }
 
@@ -169,7 +170,7 @@ object BankButton {
             colors = colors,
             enabled = enabled,
         ) {
-            Column {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 icon?.let { icon ->
                     Icon(
                         modifier = Modifier.size(18.dp),
@@ -240,7 +241,7 @@ object BankButton {
                     color -> BorderStroke(width = 1.dp, color = color)
             } ?: ButtonDefaults.outlinedButtonBorder,
         ) {
-            Column {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 icon?.let { icon ->
                     Icon(
                         modifier = Modifier.size(18.dp),
