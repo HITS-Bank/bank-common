@@ -4,7 +4,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import ru.hitsbank.bank_common.data.api.ThemeApi
 import ru.hitsbank.bank_common.data.datasource.ThemeManager
-import ru.hitsbank.bank_common.data.model.ThemeModel
+import ru.hitsbank.bank_common.data.model.RequestIdHolder
+import ru.hitsbank.bank_common.data.model.SetThemeModel
+import ru.hitsbank.bank_common.data.model.getNewRequestId
 import ru.hitsbank.bank_common.data.utils.apiCall
 import ru.hitsbank.bank_common.data.utils.toResult
 import ru.hitsbank.bank_common.domain.Completable
@@ -21,6 +23,8 @@ class ThemeRepository @Inject constructor(
     private val themeApi: ThemeApi,
     private val themeManager: ThemeManager,
 ) : IThemeRepository {
+
+    private var requestIdHolder: RequestIdHolder? = null
 
     override suspend fun updateThemeFromRemote(roleType: RoleType): Result<Completable> {
         return apiCall(Dispatchers.IO) {
@@ -42,12 +46,24 @@ class ThemeRepository @Inject constructor(
 
     override suspend fun setTheme(roleType: RoleType, theme: ThemeEntity): Result<Completable> {
         return apiCall(Dispatchers.IO) {
-            themeApi.setTheme(roleType.name, ThemeModel(theme))
+            val idHolder = requestIdHolder.getNewRequestId(roleType.hashCode())
+            requestIdHolder = idHolder
+
+            themeApi.setTheme(
+                roleType.name,
+                SetThemeModel(
+                    idHolder.requestId,
+                    theme,
+                )
+            )
                 .toResult()
                 .also { result ->
                     when (result) {
                         is Result.Error -> Unit
-                        is Result.Success -> themeManager.setTheme(result.data.theme)
+                        is Result.Success -> {
+                            requestIdHolder = null
+                            themeManager.setTheme(result.data.theme)
+                        }
                     }
                 }
                 .toCompletableResult()
