@@ -5,9 +5,11 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ru.hitsbank.bank_common.data.repository.AuthRepository
+import ru.hitsbank.bank_common.data.repository.NotificationRepository
 import ru.hitsbank.bank_common.data.repository.ProfileRepository
 import ru.hitsbank.bank_common.data.repository.ThemeRepository
 import ru.hitsbank.bank_common.domain.repository.IAuthRepository
+import ru.hitsbank.bank_common.domain.repository.INotificationRepository
 import ru.hitsbank.bank_common.domain.repository.IProfileRepository
 import ru.hitsbank.bank_common.domain.repository.IThemeRepository
 
@@ -29,4 +31,9 @@ abstract class DataModule {
     abstract fun bindThemeRepository(
         themeRepository: ThemeRepository
     ): IThemeRepository
+
+    @Binds
+    abstract fun bindNotificationRepository(
+        notificationRepository: NotificationRepository,
+    ): INotificationRepository
 }

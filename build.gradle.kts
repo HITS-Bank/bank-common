@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.google.services)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
@@ -59,6 +60,9 @@ dependencies {
     implementation(libs.stompprotocolandroid)
     implementation(libs.rxjava2.rxjava)
     implementation(libs.kotlinx.coroutines.rx2)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging.ktx)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

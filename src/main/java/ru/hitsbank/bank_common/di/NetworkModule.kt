@@ -15,6 +15,7 @@ import ru.hitsbank.bank_common.Constants.BASE_URL
 import ru.hitsbank.bank_common.Constants.KEYCLOAK_BASE_URL
 import ru.hitsbank.bank_common.Constants.TIMEOUT_SEC
 import ru.hitsbank.bank_common.data.api.AuthApi
+import ru.hitsbank.bank_common.data.api.NotificationApi
 import ru.hitsbank.bank_common.data.api.ProfileApi
 import ru.hitsbank.bank_common.data.api.ThemeApi
 import ru.hitsbank.bank_common.data.interceptor.AuthInterceptor
@@ -120,5 +121,11 @@ class NetworkModule {
     @Provides
     fun provideThemeApi(@AuthRetrofit retrofit: Retrofit): ThemeApi {
         return retrofit.create(ThemeApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideNotificationApi(@AuthRetrofit retrofit: Retrofit): NotificationApi {
+        return retrofit.create(NotificationApi::class.java)
     }
 }
