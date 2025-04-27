@@ -52,9 +52,9 @@ class ThemeRepository @Inject constructor(
             themeApi.setTheme(
                 roleType.name,
                 SetThemeModel(
-                    idHolder.requestId,
                     theme,
-                )
+                ),
+                idHolder.requestId,
             )
                 .toResult()
                 .also { result ->
